@@ -72,6 +72,7 @@ button {
 
     <button id = "submitButton" style="position: fixed; left:10vw; top:55vh; width: 80vw; height: 10vh; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="submit();" >Submit Request</button>
     <button id = "backButton" style="position: fixed; left:10vw; top:70vh; width: 80vw; height: 10vh; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/')">Back</button>
+    <h1 id = "statusText" style="position: fixed; left:0vw; top:0vh; font-size: 20vh; width: 100vw; height: 100vh; display: none; overflow: auto;">Status of request</h1>
 
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   	<script src="js/script.js"></script>
@@ -96,25 +97,28 @@ button {
 
       function submit() {
         if (signedIn) {
+          document.getElementById("statusText").innerHTML = "Loading...";
+          document.getElementById("statusText").style.display="inline";
           var xhr = new XMLHttpRequest();
             xhr.open("GET", window.location.origin+"/addToItList.php?submiterU="+ username +"&submiterP="+ password +"&taggerU="+ document.getElementById("taggerBox").innerHTML+"&taggedU="+document.getElementById("tagged").value, true);
             xhr.onload = function (e) {
                  if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                        if (xhr.responseText == "NOTFOUND") {
-                            document.getElementById("loading").innerHTML = "Account not found.  Try creating one.";
-                            document.getElementById("loginButton").style.display="inline";
+                            alert("Account not found. Try createing one.");
+                            setTimeout(() => {
+                              redirect("/signup.php");
+                            }, 1500);
                            }
                          if (xhr.responseText == "WRONGPASS") {
-                            document.getElementById("loading").innerHTML = "Wrong password.  Try again.";
-                            document.getElementById("loginButton").style.display="inline";
-                         }
-                         if (xhr.responseText == "FOUND") {
-                            document.getElementById("loading").innerHTML = "Success... Redirecting";
-                            document.getElementById("loginButton").style.display="inline";
-                            setTimeout(function(){
- 	                           window.location.href = window.location.origin+"?username="+document.getElementById("usernameBox").value+"&password="+document.getElementById("passwordBox").value;
+                          alert("Wrong password. Redirecting to login.");
+                            setTimeout(() => {
+                              redirect("/login.php");
                             }, 1500);
+                         }
+                         if (xhr.responseText == "SUCCESS") {
+                            alert("Tag Submitted Succesfully.");
+                            document.getElementById("statusText").style.display="none";
                          }
                     console.log(xhr.responseText);
                  } else {
@@ -126,9 +130,10 @@ button {
                     console.error(xhr.statusText);
                 };
                 xhr.send();
-
-
-
+        }
+        else {
+          alert("You need to sign in!");
+          redirect("/login.php");
         }
       }
     </script>

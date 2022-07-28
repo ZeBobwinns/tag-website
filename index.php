@@ -75,6 +75,7 @@ body {
       <th>Tagger</th>
       <th>Tagged</th>
       <th>Date</th>
+      <th>Submitter</th>
     </tr>
    </thead>
    <tbody>
@@ -82,11 +83,12 @@ body {
       $isSubset = true;
 	    try {$tagList = json_decode(include "readItList.php", true);}
       catch (Exception $e) {echo "<tr><td>Nobody has been tagged yet.</td></tr>"; return;}
-      for($i=count($tagList)-1;$i>0;$i--){
+      for($i=count($tagList)-1;$i>=0;$i--){
         echo "<tr>";
         echo "<td>".$tagList[$i]["taggerU"]."</td>";
         echo "<td>".$tagList[$i]["taggedU"]."</td>";
         echo "<td>".$tagList[$i]["date"]."</td>";
+        echo "<td>".$tagList[$i]["submiterU"]."</td>";
         echo "</tr>";
       }
      ?>
