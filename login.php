@@ -80,8 +80,13 @@ button {
     </div>
     <div class="container">
     <div class="center">
-    <button id = "loginButton" style="width: 5em" onclick="login();" >Login</button>
+    <button id = "loginButton" style="width: 5em; height: 20vh; margin:1vh;" onclick="login();" >Login</button>
+    <button id = "backButton" style="width: 5em; height: 10vh; margin:1vh;" onclick="redirect('/')">Back</button>
     </div>
+    </div>
+    <div style="width: 50vw; position: relative; left: 25vw; top: 5vh;">
+    <p style = "font-size:1em; float:left; position: relative; top:-2.5vh;">Allow auto-sign-in?</p>
+    <input type="checkbox" id = "rememberPassword" style="float:right;" checked></input>
     </div>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   	<script src="js/script.js"></script>
@@ -123,6 +128,10 @@ button {
                          if (xhr.responseText == "FOUND") {
                             document.getElementById("loading").innerHTML = "Success... Redirecting";
                             document.getElementById("loginButton").style.display="inline";
+                            if (document.getElementById("rememberPassword").checked) {
+                              setCookie("username", document.getElementById("usernameBox").value, 1000);
+                              setCookie("password", document.getElementById("passwordBox").value, 1000);
+                            }
                             setTimeout(function(){
  	                           window.location.href = window.location.origin+"?username="+document.getElementById("usernameBox").value+"&password="+document.getElementById("passwordBox").value;
                             }, 1500);
@@ -146,6 +155,43 @@ button {
         document.body.appendChild(loading);
          }
 
+
+         var signedIn = false;
+         if (username != null) {
+        signedIn = true;
+         }
+
+         function redirect(subURL) {
+        if (signedIn) {
+        window.location.href = window.location.origin + subURL + "?username=" + username + "&password=" + password;
+        }
+        else {
+        window.location.href = window.location.origin + subURL;
+        }
+      }
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=" + window.location.origin;
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
         </script>
 </body>
   

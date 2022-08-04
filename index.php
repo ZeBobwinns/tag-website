@@ -3,7 +3,7 @@
 
 <head>
   	<meta charset="utf-8">
-    <link rel="shortcut icon" href="favicon.ico?v=<?php echo time() ?>" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>	
   	<title>TAG</title>
   	<meta name="author" content="Zac">
   	<meta name="description" content="Fak u">
@@ -64,7 +64,8 @@ body {
       echo $tagList[count($tagList)-1]["taggedU"]." is it!";
     ?>
   </h1>
-    <h1 id = "loginDisplay" style="position: fixed; width: 95vw; left:2.5%; top: 53%; font-size: 2.5rem; text-align: center; padding:0px; border:0px;"> </h1>
+    <h1 id = "loginDisplay" style="position: fixed; width: 95vw; left:2.5%; top: 48%; font-size: 1.5rem; text-align: center; padding:0px; border:0px; overflow: auto; display:none;"> </h1>
+    <button id = "logoutButton" style="position: fixed; left:10%; top:58%; width: 80%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw; display:none;" onclick="window.location.href = window.location.origin;"> Logout </button>
     <button id = "signupButton" style="position: fixed; left:10%; top:55%; width: 40%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/signup.php')">Signup</button>
     <button id = "loginButton" style="position: fixed; left:50%; top:55%; width: 40%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/login.php')">Login</button>
     <button id = "submitButton" style="position: fixed; left:10%; top:70%; width: 80%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/submit.php')" onmousedown="easterEggHunt()" onmouseup="easterEggHuntStop()">Submit a tag</button>
@@ -100,6 +101,7 @@ body {
   	<script src="js/script.js"></script>
 
     <script>
+      var hasCookies = false;
       var signedIn = false;
       var url_string = window.location.href
       var url = new URL(url_string);
@@ -109,7 +111,14 @@ body {
         signedIn = true;
         document.getElementById("signupButton").style.display = "none";
         document.getElementById("loginButton").style.display = "none";
+        document.getElementById("logoutButton").style.display = "inline";
+        document.getElementById("loginDisplay").style.display = "inline";
         document.getElementById("loginDisplay").innerHTML = "Logged in as: "+username;
+      }
+
+      if (getCookie("username") != null && username == null) {
+        hasCookies = true;
+        window.location.href = window.location.href + "?username=" + getCookie("username") + "&password=" + getCookie("password");
       }
 
       function redirect(subURL) {
@@ -131,6 +140,30 @@ body {
         console.log("bye");
         clearTimeout(easterEggTimeout);
       }});
+
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
     </script>
 </body>
   

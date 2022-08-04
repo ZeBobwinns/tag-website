@@ -77,9 +77,10 @@ button {
     <input id = "passwordBox" type="text" placeholder="Password" style="font-size: 2em; text-align: center; width: 125%; height: 3.5em;"></input>
     </div>
     </div>
-    <div class="container">
+    <div class="container" style = "">
     <div class="center">
-    <button id = "signupButton" style="width: 5em" onclick="signup();" >Make Account</button>
+    <button id = "signupButton" style="width: 5em; height: 20vh; margin:1vh;" onclick="signup();" >Make Account</button>
+    <button id = "backButton" style="width: 5em; height: 10vh; margin:1vh;" onclick="redirect('/')">Back</button>
     </div>
     </div>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -136,6 +137,45 @@ button {
         loading.id = 'loading';
         document.body.appendChild(loading);
          }
+
+
+         var signedIn = false;
+         if (username != null) {
+        signedIn = true;
+         }
+
+         function redirect(subURL) {
+        if (signedIn) {
+        window.location.href = window.location.origin + subURL + "?username=" + username + "&password=" + password;
+        }
+        else {
+        window.location.href = window.location.origin + subURL;
+        }
+      }
+
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
     </script>
 </body>
