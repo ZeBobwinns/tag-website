@@ -65,7 +65,7 @@ body {
     ?>
   </h1>
     <h1 id = "loginDisplay" style="position: fixed; width: 95vw; left:2.5%; top: 48%; font-size: 1.5rem; text-align: center; padding:0px; border:0px; overflow: auto; display:none;"> </h1>
-    <button id = "logoutButton" style="position: fixed; left:10%; top:58%; width: 80%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw; display:none;" onclick="window.location.href = window.location.origin;"> Logout </button>
+    <button id = "logoutButton" style="position: fixed; left:10%; top:58%; width: 80%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw; display:none;" onclick="window.location.href = window.location.origin + '?noAutoLogin=true';"> Logout </button>
     <button id = "signupButton" style="position: fixed; left:10%; top:55%; width: 40%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/signup.php')">Signup</button>
     <button id = "loginButton" style="position: fixed; left:50%; top:55%; width: 40%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/login.php')">Login</button>
     <button id = "submitButton" style="position: fixed; left:10%; top:70%; width: 80%; height: 10%; background-color: #505050; color: #b0b0b0; font-size: 4.25vw;" onclick="redirect('/submit.php')" onmousedown="easterEggHunt()" onmouseup="easterEggHuntStop()">Submit a tag</button>
@@ -107,6 +107,7 @@ body {
       var url = new URL(url_string);
       var username = url.searchParams.get("username");
       var password = url.searchParams.get("password");
+      var noAutoLogin = url.searchParams.get("noAutoLogin");
       if (username != null) {
         signedIn = true;
         document.getElementById("signupButton").style.display = "none";
@@ -116,7 +117,7 @@ body {
         document.getElementById("loginDisplay").innerHTML = "Logged in as: "+username;
       }
 
-      if (getCookie("username") != null && username == null) {
+      if (getCookie("username") != null && username == null && noAutoLogin != "true") {
         hasCookies = true;
         window.location.href = window.location.href + "?username=" + getCookie("username") + "&password=" + getCookie("password");
       }
