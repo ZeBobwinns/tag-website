@@ -119,6 +119,7 @@ button {
                          if (xhr.responseText == "SUCCESS") {
                             alert("Tag Submitted Succesfully.");
                             document.getElementById("statusText").style.display="none";
+                            window.location.reload();
                          }
                     console.log(xhr.responseText);
                  } else {
